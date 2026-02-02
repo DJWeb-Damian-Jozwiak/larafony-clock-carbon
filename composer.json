@@ -9,9 +9,15 @@
             "name": "Larafony Team"
         }
     ],
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../../framework"
+        }
+    ],
     "require": {
         "php": "^8.5",
-        "larafony/core": "^2.1",
+        "larafony/core": "@dev",
         "nesbot/carbon": "^3.8"
     },
     "require-dev": {

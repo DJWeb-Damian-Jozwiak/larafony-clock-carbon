@@ -15,24 +15,38 @@ Register the service provider in your `bootstrap.php`:
 ```php
 use Larafony\Clock\Carbon\ServiceProviders\CarbonServiceProvider;
 
-$app->register(CarbonServiceProvider::class);
+$app->withServiceProviders([
+    CarbonServiceProvider::class
+]);
 ```
 
 ### Basic operations
 
 ```php
 use Larafony\Clock\Carbon\CarbonClock;
+use Larafony\Framework\Web\Application;
+use Larafony\Framework\Web\Controller;
+use Larafony\Framework\Routing\Advanced\Attributes\Route;
+use Larafony\Framework\Http\Factories\ResponseFactory;
 
-// Get from container
-$clock = $container->get(CarbonClock::class);
+final class SomeController extends Controller
+{
+    #[Route('/some-route')]
+    //auto inject from DI container
+    public function someAction(CarbonClock $clock): \Psr\Http\Message\ResponseInterface
+    {
+        //get from application singleton
+        $clock2 = Application::get(CarbonClock::class);
+        return ResponseFactory::createJsonResponse(
+            [
+                'now' => $clock->now(),
+                'diff' => $clock->now()->diffForHumans()
+                'long_day' => $clock->addDays(5)->format('l')
+            ]
+        );
+    }
+}
 
-// Get current time
-$now = $clock->now();
-
-// Carbon provides rich date/time manipulation
-echo $now->format('Y-m-d H:i:s');
-echo $now->diffForHumans(); // "just now"
-echo $now->addDays(5)->format('l'); // "Saturday"
 ```
 
 ### PSR-20 Compatibility
@@ -78,4 +92,4 @@ Get it now at [masterphp.eu](https://masterphp.eu)
 
 ## License
 
-MIT
+MIT License. Larafony-clock-carbon is open-sourced software licensed under the [MIT license](https://opensource.org/license/MIT).

@@ -10,6 +10,7 @@ use DateTimeZone;
 use Larafony\Framework\Clock\Contracts\Clock;
 use Larafony\Framework\Clock\Enums\TimeFormat;
 use Larafony\Framework\Clock\Enums\Timezone;
+use Larafony\Framework\Clock\Instant;
 use Larafony\Framework\Database\ORM\Contracts\Castable;
 
 /**
@@ -262,5 +263,21 @@ final class CarbonClock implements Clock, Castable
     public function usleep(int $microseconds): void
     {
         usleep($microseconds);
+    }
+
+    /**
+     * Get an Instant representing the current time.
+     */
+    public function instant(): Instant
+    {
+        return Instant::fromDateTime($this->now());
+    }
+
+    /**
+     * Get a CarbonInstant representing the current time.
+     */
+    public function carbonInstant(): CarbonInstant
+    {
+        return CarbonInstant::fromDateTime($this->now());
     }
 }
